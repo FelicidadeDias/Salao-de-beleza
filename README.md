@@ -1,4 +1,4 @@
-# Fely e Amigos — Beauty, Spa & Wellness
+# Loja Demonstrativa para Salões de Beleza — Studio Belle
 
 Website demonstrativo e adaptável para salões de beleza, centros de estética, beauty lounges e spas.
 
@@ -27,7 +27,7 @@ Abra `index.html` e procure o objecto `CONFIG`, no final do ficheiro:
 
 ```js
 const CONFIG={
-  brand:'Fely e Amigos',
+  brand:'Studio Belle',
   whatsapp:'',
   phone:'+244 000 000 000',
   address:'Adicionar endereço do salão',
@@ -50,7 +50,7 @@ Edite também as listas `services` e `products` para actualizar nomes, descriç�
 
 ## Conteúdo demonstrativo
 
-“Fely e Amigos”, serviços, produtos, preços, fotografias e testemunhos são exemplos de apresentação. Não representam um salão real nem avaliações verificadas. Devem ser substituídos por informação verdadeira antes de divulgar o site como oficial.
+“Studio Belle”, serviços, produtos, preços, fotografias e testemunhos são exemplos de apresentação. Não representam um salão real nem avaliações verificadas. Este repositório funciona como modelo-base e pode ser personalizado para diferentes salões de beleza. Devem ser substituídos por informação verdadeira antes de divulgar o site como oficial.
 
 ## Tecnologias
 
