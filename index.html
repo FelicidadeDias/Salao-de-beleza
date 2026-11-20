@@ -16,14 +16,13 @@
 @media(max-width:650px){.container{width:min(100% - 30px,560px)}.nav{height:68px}.brand{font-size:23px}.menu-toggle{display:block}.links{display:none;position:absolute;top:68px;left:0;right:0;background:var(--cream);padding:20px;flex-direction:column;align-items:flex-start;border-bottom:1px solid var(--line)}.links.show{display:flex}.nav-actions .btn{display:none}.hero{grid-template-columns:1fr}.hero-copy{padding:62px 25px 45px}.hero-photo{min-height:340px;grid-row:1}.hero h1{font-size:48px}.trust-row{grid-template-columns:1fr;gap:15px}.trust-item{border:0;border-bottom:1px solid var(--line);padding-bottom:12px}.trust-item:last-child{border:0;padding:0}.section{padding:65px 0}.categories{grid-template-columns:repeat(2,1fr);gap:10px}.category{min-height:175px}.cards{grid-template-columns:1fr 1fr;gap:12px}.card-image{height:155px}.card-body{padding:13px}.card h3{font-size:19px}.card p{font-size:11px;min-height:58px}.card-bottom{align-items:flex-start;flex-direction:column}.mini-btn{width:100%}.toolbar{align-items:stretch}.search{width:100%}.split,.contact-grid{grid-template-columns:1fr;gap:28px}.split-photo{height:340px}.product-grid{gap:12px}.product .card-image{height:160px}.banner-inner{display:block}.banner .btn{margin-top:22px}.testimonials{grid-template-columns:1fr}.contact-form{grid-template-columns:1fr}.contact-form textarea,.contact-form .btn{grid-column:auto}.footer-grid{grid-template-columns:1fr 1fr}.footer-grid>div:first-child{grid-column:1/-1}.footer-bottom{flex-direction:column}.whatsapp{right:12px;bottom:12px;padding:12px 14px}}
 @media(max-width:390px){.cards{grid-template-columns:1fr}.card-image{height:210px}.card p{min-height:0}.categories{grid-template-columns:1fr 1fr}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
 </head>
 <body>
 <div class="topline">MODELO DEMONSTRATIVO · LOJA ONLINE PARA SALÕES DE BELEZA</div>
 <header class="header"><div class="container nav">
 <a class="brand" href="#inicio" data-brand>Studio Belle<small>SALÃO DE BELEZA · DEMONSTRAÇÃO</small></a>
 <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
-<nav class="links" id="navLinks"><a href="#inicio">Início</a><a href="#servicos">Serviços</a><a href="#produtos">Loja</a><a href="#sobre">Sobre</a><a href="#contacto">Contactos</a><a href="admin.html" aria-label="Área do administrador">Administrador</a></nav>
+<nav class="links" id="navLinks"><a href="#inicio">Início</a><a href="#servicos">Serviços</a><a href="#produtos">Loja</a><a href="#sobre">Sobre</a><a href="#contacto">Contactos</a></nav>
 <div class="nav-actions"><button class="cart-btn" id="openCart">Sacola <span class="cart-count" id="cartCount">0</span></button><a class="btn" href="#contacto">Marcar horário</a></div>
 </div></header>
 <main>
@@ -48,8 +47,8 @@
 <div class="modal" id="cartModal" role="dialog" aria-modal="true" aria-label="Sacola de compras"><div class="modal-box"><button class="close" data-close="cartModal" aria-label="Fechar">×</button><h3>A sua sacola</h3><p>Confira os produtos seleccionados antes de enviar o pedido.</p><div class="cart-list" id="cartList"></div><button class="btn" style="width:100%" id="checkout">Enviar pedido pelo WhatsApp</button></div></div>
 <script>
 // LOJA DEMONSTRATIVA: substitua marca, contactos, serviços, produtos, preços e imagens pelos dados do salão cliente antes da publicação.
-let CONFIG={brand:'Studio Belle',whatsapp:'',phone:'+244 000 000 000',address:'Adicionar endereço do salão',hours:'Segunda a Sábado · 08h às 18h',instagram:'@seusalao',currency:'Kz'};
-let services=[
+const CONFIG={brand:'Studio Belle',whatsapp:'',phone:'+244 000 000 000',address:'Adicionar endereço do salão',hours:'Segunda a Sábado · 08h às 18h',instagram:'@seusalao',currency:'Kz'};
+const services=[
 {n:'Corte & Styling',c:'Cabelo',d:'Corte personalizado, finalização e styling para valorizar o seu visual.',p:'12.000',t:'A partir de'},
 {n:'Coloração',c:'Cabelo',d:'Cor, iluminação e técnicas adaptadas ao seu tipo de cabelo.',p:'25.000',t:'A partir de'},
 {n:'Tratamento Capilar',c:'Cabelo',d:'Hidratação, nutrição e reconstrução para fios mais cuidados.',p:'15.000',t:'A partir de'},
@@ -63,7 +62,7 @@ let services=[
 {n:'Massagem Relaxante',c:'Spa',d:'Um momento de relaxamento para aliviar a tensão do dia.',p:'20.000',t:'A partir de'},
 {n:'Ritual Spa',c:'Spa',d:'Experiência de bem-estar com cuidados e ambiente tranquilo.',p:'35.000',t:'A partir de'}
 ];
-let products=[
+const products=[
 {n:'Champô Nutritivo',c:'Cabelo',d:'Limpeza suave para a rotina capilar.',p:'8.500',img:'photo-1608248543803-ba4f8c70ae0b'},
 {n:'Máscara Capilar',c:'Cabelo',d:'Cuidado intensivo para fios ressecados.',p:'12.000',img:'photo-1601049541289-9b1b7bbbfe19'},
 {n:'Sérum Facial',c:'Pele',d:'Um complemento para a rotina diária de pele.',p:'15.000',img:'photo-1608248543803-ba4f8c70ae0b'},
@@ -99,40 +98,6 @@ document.querySelectorAll('[data-jump]').forEach(a=>a.addEventListener('click',(
 document.querySelectorAll('[data-brand]').forEach(el=>{el.childNodes[0].textContent=CONFIG.brand});document.querySelectorAll('[data-brand-text]').forEach(el=>el.textContent=CONFIG.brand);
 document.querySelectorAll('[data-phone]').forEach(el=>el.textContent=CONFIG.phone);document.querySelectorAll('[data-address]').forEach(el=>el.textContent=CONFIG.address);document.querySelectorAll('[data-hours]').forEach(el=>el.textContent=CONFIG.hours);document.querySelectorAll('[data-instagram]').forEach(el=>el.textContent=CONFIG.instagram);
 document.getElementById('year').textContent=new Date().getFullYear();
-async function loadPublishedContent(){
- // Primeiro, procura alterações guardadas pelo painel neste navegador.
- try{
-  const local=localStorage.getItem('studioBelleContent');
-  if(local){
-   const c=JSON.parse(local);
-   if(c.config)CONFIG={...CONFIG,...c.config};
-   if(Array.isArray(c.services)&&c.services.length)services=c.services;
-   if(Array.isArray(c.products)&&c.products.length)products=c.products;
-   applyStoreConfig();
-   return;
-  }
- }catch(e){console.warn('Não foi possível ler os dados locais.',e)}
- // Mantém compatibilidade com uma futura ligação Supabase.
- try{
-  if(!window.SALON_SUPABASE_URL||!window.SALON_SUPABASE_ANON_KEY||window.SALON_SUPABASE_URL.includes('SEU-PROJECTO'))return;
-  const client=supabase.createClient(window.SALON_SUPABASE_URL,window.SALON_SUPABASE_ANON_KEY);
-  const {data,error}=await client.from('site_content').select('content').eq('id',1).maybeSingle();
-  if(error||!data?.content)return;
-  const c=data.content;
-  if(c.config)CONFIG={...CONFIG,...c.config};
-  if(Array.isArray(c.services)&&c.services.length)services=c.services;
-  if(Array.isArray(c.products)&&c.products.length)products=c.products;
-  applyStoreConfig();
- }catch(e){console.warn('Conteúdo remoto indisponível; a loja mantém os dados demonstrativos.',e)}
-}
-function applyStoreConfig(){
- document.querySelectorAll('[data-brand]').forEach(el=>{el.childNodes[0].textContent=CONFIG.brand});
- document.querySelectorAll('[data-brand-text]').forEach(el=>el.textContent=CONFIG.brand);
- document.querySelectorAll('[data-phone]').forEach(el=>el.textContent=CONFIG.phone);
- document.querySelectorAll('[data-address]').forEach(el=>el.textContent=CONFIG.address);
- document.querySelectorAll('[data-hours]').forEach(el=>el.textContent=CONFIG.hours);
- document.querySelectorAll('[data-instagram]').forEach(el=>el.textContent=CONFIG.instagram);
-}
-loadPublishedContent().finally(()=>{renderServices();renderProducts();updateCart()});
+renderServices();renderProducts();updateCart();
 </script>
 </body></html>
