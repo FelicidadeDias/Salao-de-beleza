@@ -28,49 +28,49 @@
 <p class="hint">As alterações publicadas aparecem na loja para todos os visitantes. O acesso é protegido pelo Supabase Auth e pelas políticas da base de dados.</p>
 </section></main>
 <script>
-let client=null,user=null;
+// ACESSO DEMONSTRATIVO: palavra-passe visível no código-fonte.
+const ADMIN_PASSWORD='Felicidade';
+const STORAGE_KEY='studioBelleContent';
 const $=id=>document.getElementById(id);
-function configReady(){return window.SALON_SUPABASE_URL&&window.SALON_SUPABASE_ANON_KEY&&!window.SALON_SUPABASE_URL.includes('SEU-PROJECTO')}
 function status(id,msg){$(id).textContent=msg}
-async function init(){if(!configReady()){status('loginStatus','Falta configurar supabase-config.js com a URL e a chave pública (anon/publishable) do projecto Supabase.');$('loginBtn').disabled=true;return}
-client=supabase.createClient(window.SALON_SUPABASE_URL,window.SALON_SUPABASE_ANON_KEY);
-const {data}=await client.auth.getSession();if(data.session){user=data.session.user;await openEditor()}}
-async function openEditor(){
- const {data:profile}=await client.auth.getUser();
- if(!profile.user){return}
- const role=profile.user.app_metadata?.role;
- if(role!=='admin'){await client.auth.signOut();status('loginStatus','Esta conta não tem permissão de administrador.');return}
- $('loginBox').classList.add('hidden');$('editor').classList.remove('hidden');
- await loadData();
+function openEditor(){
+ $('loginBox').classList.add('hidden');
+ $('editor').classList.remove('hidden');
+ loadData();
 }
-async function loadData(){
- status('editorStatus','A obter conteúdo publicado…');
- const {data,error}=await client.from('site_content').select('content').eq('id',1).single();
- if(error){status('editorStatus','Não foi possível carregar os dados: '+error.message);return}
- const c=data.content||{};
- $('configJson').value=JSON.stringify(c.config||{},null,2);
- $('servicesJson').value=JSON.stringify(c.services||[],null,2);
- $('productsJson').value=JSON.stringify(c.products||[],null,2);
- status('editorStatus','Conteúdo carregado. Faça as alterações e publique quando estiver pronto.');
+function loadData(){
+ const saved=localStorage.getItem(STORAGE_KEY);
+ if(saved){
+  try{
+   const c=JSON.parse(saved);
+   $('configJson').value=JSON.stringify(c.config||{},null,2);
+   $('servicesJson').value=JSON.stringify(c.services||[],null,2);
+   $('productsJson').value=JSON.stringify(c.products||[],null,2);
+   status('editorStatus','Dados guardados neste navegador. Pode editar e guardar novamente.');
+   return;
+  }catch(e){status('editorStatus','Os dados locais não puderam ser lidos. Verifique o JSON.');return}
+ }
+ $('configJson').value=JSON.stringify({brand:'Studio Belle',whatsapp:'',phone:'+244 000 000 000',address:'Adicionar endereço do salão',hours:'Segunda a Sábado · 08h às 18h',instagram:'@seusalao',currency:'Kz'},null,2);
+ $('servicesJson').value='[]';
+ $('productsJson').value='[]';
+ status('editorStatus','Ainda não existem alterações guardadas neste navegador. A loja mantém os conteúdos demonstrativos.');
 }
-$('loginBtn').onclick=async()=>{
- if(!client){await init();if(!client)return}
- status('loginStatus','A validar acesso…');
- const {data,error}=await client.auth.signInWithPassword({email:$('email').value,password:$('password').value});
- if(error){status('loginStatus','Falha no acesso: '+error.message);return}
- user=data.user;await openEditor();
+$('loginBtn').onclick=()=>{
+ if($('password').value!==ADMIN_PASSWORD){status('loginStatus','Palavra-passe incorrecta.');return}
+ sessionStorage.setItem('studioBelleAdminSession','active');
+ openEditor();
 };
-$('logoutBtn').onclick=async()=>{await client.auth.signOut();location.reload()};
+$('password').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});
+$('logoutBtn').onclick=()=>{sessionStorage.removeItem('studioBelleAdminSession');location.reload()};
 $('reloadBtn').onclick=loadData;
-$('saveBtn').onclick=async()=>{
+$('saveBtn').onclick=()=>{
  try{
   const content={config:JSON.parse($('configJson').value),services:JSON.parse($('servicesJson').value),products:JSON.parse($('productsJson').value)};
   if(!Array.isArray(content.services)||!Array.isArray(content.products))throw new Error('Serviços e produtos têm de ser listas JSON.');
-  status('editorStatus','A publicar…');
-  const {error}=await client.from('site_content').upsert({id:1,content,updated_at:new Date().toISOString()});
-  if(error)throw error;
-  status('editorStatus','Alterações guardadas e publicadas com sucesso. Actualize a loja para confirmar.');
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(content));
+  status('editorStatus','Alterações guardadas neste navegador. Abra a loja neste mesmo dispositivo e navegador para as visualizar.');
  }catch(e){status('editorStatus','Erro: '+e.message)}
 };
-init();
+if(sessionStorage.getItem('studioBelleAdminSession')==='active')openEditor();
+</script>
 </script></body></html>
