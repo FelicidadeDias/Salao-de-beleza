@@ -1,4 +1,4 @@
-# Modelo de Salão de Beleza & Spa
+# Fely e Amigos — Beauty, Spa & Wellness
 
 Website demonstrativo e adaptável para salões de beleza, centros de estética, beauty lounges e spas.
 
@@ -27,7 +27,7 @@ Abra `index.html` e procure o objecto `CONFIG`, no final do ficheiro:
 
 ```js
 const CONFIG={
-  brand:'Maison Belle',
+  brand:'Fely e Amigos',
   whatsapp:'',
   phone:'+244 000 000 000',
   address:'Adicionar endereço do salão',
@@ -50,7 +50,7 @@ Edite também as listas `services` e `products` para actualizar nomes, descriç�
 
 ## Conteúdo demonstrativo
 
-“Maison Belle”, serviços, produtos, preços, fotografias e testemunhos são exemplos de apresentação. Não representam um salão real nem avaliações verificadas. Devem ser substituídos por informação verdadeira antes de divulgar o site como oficial.
+“Fely e Amigos”, serviços, produtos, preços, fotografias e testemunhos são exemplos de apresentação. Não representam um salão real nem avaliações verificadas. Devem ser substituídos por informação verdadeira antes de divulgar o site como oficial.
 
 ## Tecnologias
 
