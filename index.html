@@ -100,23 +100,38 @@ document.querySelectorAll('[data-brand]').forEach(el=>{el.childNodes[0].textCont
 document.querySelectorAll('[data-phone]').forEach(el=>el.textContent=CONFIG.phone);document.querySelectorAll('[data-address]').forEach(el=>el.textContent=CONFIG.address);document.querySelectorAll('[data-hours]').forEach(el=>el.textContent=CONFIG.hours);document.querySelectorAll('[data-instagram]').forEach(el=>el.textContent=CONFIG.instagram);
 document.getElementById('year').textContent=new Date().getFullYear();
 async function loadPublishedContent(){
+ // Primeiro, procura alterações guardadas pelo painel neste navegador.
+ try{
+  const local=localStorage.getItem('studioBelleContent');
+  if(local){
+   const c=JSON.parse(local);
+   if(c.config)CONFIG={...CONFIG,...c.config};
+   if(Array.isArray(c.services)&&c.services.length)services=c.services;
+   if(Array.isArray(c.products)&&c.products.length)products=c.products;
+   applyStoreConfig();
+   return;
+  }
+ }catch(e){console.warn('Não foi possível ler os dados locais.',e)}
+ // Mantém compatibilidade com uma futura ligação Supabase.
  try{
   if(!window.SALON_SUPABASE_URL||!window.SALON_SUPABASE_ANON_KEY||window.SALON_SUPABASE_URL.includes('SEU-PROJECTO'))return;
-  const {createClient}=supabase;
-  const client=createClient(window.SALON_SUPABASE_URL,window.SALON_SUPABASE_ANON_KEY);
+  const client=supabase.createClient(window.SALON_SUPABASE_URL,window.SALON_SUPABASE_ANON_KEY);
   const {data,error}=await client.from('site_content').select('content').eq('id',1).maybeSingle();
   if(error||!data?.content)return;
   const c=data.content;
   if(c.config)CONFIG={...CONFIG,...c.config};
-  if(Array.isArray(c.services))services=c.services;
-  if(Array.isArray(c.products))products=c.products;
-  document.querySelectorAll('[data-brand]').forEach(el=>{el.childNodes[0].textContent=CONFIG.brand});
-  document.querySelectorAll('[data-brand-text]').forEach(el=>el.textContent=CONFIG.brand);
-  document.querySelectorAll('[data-phone]').forEach(el=>el.textContent=CONFIG.phone);
-  document.querySelectorAll('[data-address]').forEach(el=>el.textContent=CONFIG.address);
-  document.querySelectorAll('[data-hours]').forEach(el=>el.textContent=CONFIG.hours);
-  document.querySelectorAll('[data-instagram]').forEach(el=>el.textContent=CONFIG.instagram);
+  if(Array.isArray(c.services)&&c.services.length)services=c.services;
+  if(Array.isArray(c.products)&&c.products.length)products=c.products;
+  applyStoreConfig();
  }catch(e){console.warn('Conteúdo remoto indisponível; a loja mantém os dados demonstrativos.',e)}
+}
+function applyStoreConfig(){
+ document.querySelectorAll('[data-brand]').forEach(el=>{el.childNodes[0].textContent=CONFIG.brand});
+ document.querySelectorAll('[data-brand-text]').forEach(el=>el.textContent=CONFIG.brand);
+ document.querySelectorAll('[data-phone]').forEach(el=>el.textContent=CONFIG.phone);
+ document.querySelectorAll('[data-address]').forEach(el=>el.textContent=CONFIG.address);
+ document.querySelectorAll('[data-hours]').forEach(el=>el.textContent=CONFIG.hours);
+ document.querySelectorAll('[data-instagram]').forEach(el=>el.textContent=CONFIG.instagram);
 }
 loadPublishedContent().finally(()=>{renderServices();renderProducts();updateCart()});
 </script>
